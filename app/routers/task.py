@@ -32,7 +32,7 @@ async def task_by_id(task_id: int,
     return select_Task
 
 @router.post('/creat')
-async def create_rask(createTask: CreateTask,
+async def create_task(createTask: CreateTask,
                       user_id: int,
                       session: Annotated[Session, Depends(get_db)]):
 
@@ -43,12 +43,11 @@ async def create_rask(createTask: CreateTask,
 
     db_Task = Task(
             title=createTask.title,
-            content=createTask.priority,
+            content=createTask.content,
             priority=createTask.priority,
-            completed=createTask.completed,
-            user_id=user_id,
-            slug=slugify(createTask.slug),
-            user=createTask.user
+            completed=False,
+            slug=slugify(createTask.title),
+            user_id=user_id
     )
 
     session.add(db_Task)
@@ -97,5 +96,3 @@ async def delete_task(
     session.commit()
 
     return {'status_code': status.HTTP_200_OK, 'transaction': 'Task delete is successful!'}
-
-
